@@ -22,6 +22,7 @@ public class Tweet {
     public User user;
     public String relativeTime;
     public String mediaUrl;
+    public long id;
 
     public Tweet(){}
 
@@ -31,6 +32,7 @@ public class Tweet {
         tweet.createdAt = json.getString("created_at");
         tweet.user = User.fromJson(json.getJSONObject("user"));
         tweet.relativeTime = Tweet.getRelativeTimeAgo(tweet.createdAt);
+        tweet.id = json.getLong("id");
 
         JSONObject entities = json.getJSONObject("entities");
         JSONArray media = null;
@@ -95,5 +97,9 @@ public class Tweet {
 
     public String getMediaUrl() {
         return mediaUrl;
+    }
+
+    public long getId() {
+        return id;
     }
 }
