@@ -1,6 +1,7 @@
 package com.codepath.apps.restclienttemplate;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -9,12 +10,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
 import org.parceler.Parcels;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import okhttp3.Headers;
 
 public class TweetDetailsActivity extends AppCompatActivity {
+    private static final String TAG = "TweetDetailsActivity";
+
     Tweet tweet;
 
     ImageView ivProfilePic;
@@ -25,6 +30,7 @@ public class TweetDetailsActivity extends AppCompatActivity {
     ImageView ivMedia;
     ImageView ivLike;
     ImageView ivRetweet;
+    TwitterClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +49,7 @@ public class TweetDetailsActivity extends AppCompatActivity {
         ivLike = findViewById(R.id.ivLike);
         ivRetweet = findViewById(R.id.ivRetweet);
 
+        client = TwitterApplication.getRestClient(this);
 
         //LIKE AND RETWEET PICTURES MUST BE SET APPROPRIATELY ACCORDING TO WHAT HAS HAPPENED
 
@@ -65,18 +72,40 @@ public class TweetDetailsActivity extends AppCompatActivity {
     public void clickHeart(android.view.View like){
 
         if(ivLike.getTag().equals("liked")){
-            System.out.println("here");
             Glide.with(this).load(R.drawable.ic_vector_heart_stroke).into(ivLike);
             ivLike.setTag("unliked");
 
             //twitter api to unlike
+            client.unlikeTweet(tweet.getId(), new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Headers headers, JSON json) {
+                    //nothing needs to be done
+                }
+
+                @Override
+                public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                    Log.e(TAG, "onFailure: unliking a tweet", throwable);
+
+                }
+            });
+
         }else{
-            System.out.println("here2");
             Glide.with(this).load(R.drawable.ic_vector_heart).into(ivLike);
             ivLike.setTag("liked");
 
             //twitter api to like
+            client.likeTweet(tweet.getId(), new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Headers headers, JSON json) {
+                    //nothing needs to be done
+                }
 
+                @Override
+                public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                    Log.e(TAG, "onFailure: liking a tweet", throwable);
+
+                }
+            });
         }
     }
 
