@@ -65,4 +65,27 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="10dp"
         tools:text="some time" />
+
+    <ImageView
+        android:id="@+id/ivLike"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_below="@+id/ivMedia"
+        android:layout_alignTop="@id/tvTimestamp"
+        android:layout_marginEnd="10dp"
+        android:layout_toStartOf="@+id/ivRetweet"
+        android:onClick="clickHeart"
+        android:tag = "unliked"
+        app:srcCompat="@drawable/ic_vector_heart_stroke" />
+
+    <ImageView
+        android:id="@+id/ivRetweet"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_below="@+id/ivMedia"
+        android:layout_alignTop="@id/tvTimestamp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="0dp"
+        android:onClick="clickRetweet"
+        app:srcCompat="@drawable/ic_vector_retweet_stroke" />
 </RelativeLayout>

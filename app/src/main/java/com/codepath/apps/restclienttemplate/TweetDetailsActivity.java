@@ -23,6 +23,8 @@ public class TweetDetailsActivity extends AppCompatActivity {
     TextView tvHandle;
     TextView tvTimestamp;
     ImageView ivMedia;
+    ImageView ivLike;
+    ImageView ivRetweet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,12 @@ public class TweetDetailsActivity extends AppCompatActivity {
         tvTimestamp = findViewById(R.id.tvTimestamp);
         ivMedia = findViewById(R.id.ivMedia);
 
+        ivLike = findViewById(R.id.ivLike);
+        ivRetweet = findViewById(R.id.ivRetweet);
+
+
+        //LIKE AND RETWEET PICTURES MUST BE SET APPROPRIATELY ACCORDING TO WHAT HAS HAPPENED
+
         tvBody.setText(tweet.getBody());
         tvName.setText(tweet.getUser().getName());
         tvHandle.setText(tweet.getUser().getTwitterId());
@@ -51,6 +59,29 @@ public class TweetDetailsActivity extends AppCompatActivity {
             ivMedia.setVisibility(View.VISIBLE);
             Glide.with(this).load(tweet.getMediaUrl()).fitCenter().transform(new RoundedCornersTransformation(20, 0)).into(ivMedia);
         }
+
+    }
+
+    public void clickHeart(android.view.View like){
+
+        if(ivLike.getTag().equals("liked")){
+            System.out.println("here");
+            Glide.with(this).load(R.drawable.ic_vector_heart_stroke).into(ivLike);
+            ivLike.setTag("unliked");
+
+            //twitter api to unlike
+        }else{
+            System.out.println("here2");
+            Glide.with(this).load(R.drawable.ic_vector_heart).into(ivLike);
+            ivLike.setTag("liked");
+
+            //twitter api to like
+
+        }
+    }
+
+    public void clickRetweet(android.view.View retweet){
+        //open up something to make a retweet, call twitter api
 
     }
 }
