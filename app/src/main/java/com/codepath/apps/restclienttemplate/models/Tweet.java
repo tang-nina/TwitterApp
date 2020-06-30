@@ -33,13 +33,15 @@ public class Tweet {
         tweet.relativeTime = Tweet.getRelativeTimeAgo(tweet.createdAt);
 
         JSONObject entities = json.getJSONObject("entities");
-        JSONArray media;
+        JSONArray media = null;
         try {
            media = entities.getJSONArray("media");
            JSONObject first_pic = media.getJSONObject(0);
            tweet.mediaUrl = first_pic.getString("media_url_https");
-
         }catch(JSONException e){
+            System.out.println(tweet.body);
+            System.out.println(entities);
+            System.out.println();
             tweet.mediaUrl = "";
         }
 
