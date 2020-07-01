@@ -120,6 +120,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
         @Override
         public void onClick(View view) {
+            System.out.println("here");
             int position = getAdapterPosition();
 
             if (position != RecyclerView.NO_POSITION) {
