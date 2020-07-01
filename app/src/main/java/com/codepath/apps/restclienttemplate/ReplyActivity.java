@@ -37,7 +37,9 @@ public class ReplyActivity extends AppCompatActivity {
         client = TwitterApplication.getRestClient(this);
 
         tweet = Parcels.unwrap(getIntent().getParcelableExtra(Tweet.class.getSimpleName()));
-        etCompose.setText(tweet.getUser().getTwitterId());
+        //android:hint="What's happening?"
+
+        etCompose.setHint("Replying to " + tweet.getUser().getTwitterId());
 
 
         btnReply.setOnClickListener(new View.OnClickListener() {
