@@ -26,7 +26,6 @@ public class TweetDetailsActivity extends AppCompatActivity {
     TwitterClient client;
     ActivityTweetDetailsBinding binding;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +33,8 @@ public class TweetDetailsActivity extends AppCompatActivity {
         // layout of activity is stored in a special property called root
         View view = binding.getRoot();
         setContentView(view);
+
+        getSupportActionBar().setTitle("Tweet");
 
         tweet = Parcels.unwrap(getIntent().getParcelableExtra(Tweet.class.getSimpleName()));
         client = TwitterApplication.getRestClient(this);
@@ -43,7 +44,7 @@ public class TweetDetailsActivity extends AppCompatActivity {
         binding.tvHandle.setText(tweet.getUser().getTwitterId());
         binding.tvTimestamp.setText(tweet.getRelativeTime());
 
-        Glide.with(this).load(tweet.getUser().getProfileImageUrl()).into(binding.ivProfilePic);
+        Glide.with(this).load(tweet.getUser().getProfileImageUrl()).circleCrop().into(binding.ivProfilePic);
 
         if (tweet.getMediaUrl().equals("")) {
             binding.ivMedia.setVisibility(View.GONE);

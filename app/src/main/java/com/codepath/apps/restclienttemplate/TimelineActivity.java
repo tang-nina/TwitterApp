@@ -37,6 +37,8 @@ public class TimelineActivity extends AppCompatActivity {
     TweetsAdapter adapter;
     LinearLayoutManager layoutManager;
     ActivityTimelineBinding binding;
+    MenuItem miActionProgressItem;
+
 
     private EndlessRecyclerViewScrollListener scrollListener;
 
@@ -54,10 +56,12 @@ public class TimelineActivity extends AppCompatActivity {
         binding.swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                showProgressBar();
                 Log.i(TAG, "onRefresh: here");
                 adapter.clear();
                 populateHomeTimeline();
                 binding.swipeContainer.setRefreshing(false);
+                hideProgressBar();
             }
         });
         // Configure the refreshing colors
@@ -72,7 +76,6 @@ public class TimelineActivity extends AppCompatActivity {
         binding.rvTweets.setAdapter(adapter);
         layoutManager = new LinearLayoutManager(this);
         binding.rvTweets.setLayoutManager(layoutManager);
-
 
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
@@ -93,6 +96,7 @@ public class TimelineActivity extends AppCompatActivity {
 
     public void loadNextDataFromApi(int offset) {
         // Send an API request to retrieve appropriate paginated data
+        showProgressBar();
         client.getNextPage(tweets.get(tweets.size() - 1).getId(), new JsonHttpResponseHandler() {
 
             @Override
@@ -100,19 +104,22 @@ public class TimelineActivity extends AppCompatActivity {
                 //  --> Deserialize and construct new model objects from the API response
                 JSONArray array = json.jsonArray;
 
-                try{
+                try {
                     //  --> Append the new data objects to the existing set of items inside the array of items
                     //  --> Notify the adapter of the new items made with `notifyItemRangeInserted()`
                     adapter.addAll(Tweet.fromJson(array));
+                    hideProgressBar();
 
                 }catch(JSONException e){
                     Log.e(TAG, "json exception");
+                    hideProgressBar();
                 }
             }
 
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
                 Log.e(TAG, "onFailure!", throwable);
+                hideProgressBar();
             }
         });
     }
@@ -125,6 +132,7 @@ public class TimelineActivity extends AppCompatActivity {
                 try{
                     tweets.addAll(Tweet.fromJson(array));
                     adapter.notifyDataSetChanged();
+                    hideProgressBar();
                 }catch(JSONException e){
                     Log.e(TAG, "json exception");
                 }
@@ -145,6 +153,24 @@ public class TimelineActivity extends AppCompatActivity {
         return true; //must be true for menu to be displayed
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // Store instance of the menu item containing progress
+        miActionProgressItem = menu.findItem(R.id.miActionProgress);
+        miActionProgressItem.setVisible(true);
+        return super.onPrepareOptionsMenu(menu); //finish
+    }
+
+    public void showProgressBar() {
+        // Show progress item
+        miActionProgressItem.setVisible(true);
+    }
+
+    public void hideProgressBar() {
+        // Hide progress item
+        miActionProgressItem.setVisible(false);
+    }
+
     //passes the item on the actionbar that is clicked into this method, you can check it and carry
     //out actions accordingly
     @Override
@@ -160,32 +186,25 @@ public class TimelineActivity extends AppCompatActivity {
         }
     }
 
+    public void reload(@Nullable Intent data, boolean flag) {
+        showProgressBar();
+        Tweet tweet = Parcels.unwrap(data.getParcelableExtra("tweet"));
+        tweets.add(0, tweet);
+        adapter.notifyItemInserted(0);
+        if (flag) {
+            binding.rvTweets.smoothScrollToPosition(0); //will set your screen to the very top of the list
+        }
+        hideProgressBar();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        System.out.println("here activity result " + requestCode);
+        //System.out.println("here activity result " + requestCode);
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
-            Tweet tweet = Parcels.unwrap(data.getParcelableExtra("tweet"));
-            tweets.add(0, tweet);
-            adapter.notifyItemInserted(0);
-            binding.rvTweets.smoothScrollToPosition(0); //will set your screen to the very top of the list
+            reload(data, true);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-
-    public void reload(@Nullable Intent data) {
-        Tweet tweet = Parcels.unwrap(data.getParcelableExtra("tweet"));
-        tweets.add(0, tweet);
-        adapter.notifyItemInserted(0);
-        binding.rvTweets.smoothScrollToPosition(0); //will set your screen to the very top of the list
-    }
-
-    public void addToFront(@Nullable Intent data) {
-        Tweet tweet = Parcels.unwrap(data.getParcelableExtra("tweet"));
-        tweets.add(0, tweet);
-        adapter.notifyItemInserted(0);
-        //rvTweets.smoothScrollToPosition(0); //will set your screen to the very top of the list
-    }
-
 }
 
 

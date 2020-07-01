@@ -55,7 +55,7 @@ public class ReplyActivity extends AppCompatActivity {
 
                         Intent intent = new Intent();
                         intent.putExtra("tweet", Parcels.wrap(tweet));
-                        TimelineActivity.getInstance().reload(intent);
+                        TimelineActivity.getInstance().reload(intent, true);
                         finish();
                     }
 
