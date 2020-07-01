@@ -28,6 +28,9 @@ public class TimelineActivity extends AppCompatActivity {
     private static final String TAG = "TimelineActivity";
     private final int REQUEST_CODE = 20;
 
+    private static TimelineActivity instance;
+
+
     TwitterClient client;
     RecyclerView rvTweets;
     List<Tweet> tweets;
@@ -43,6 +46,8 @@ public class TimelineActivity extends AppCompatActivity {
         setContentView(R.layout.activity_timeline);
 
         System.out.println("ON CREATE CALLED");
+        instance = this;
+
 
         client = TwitterApplication.getRestClient(this);
 
@@ -85,9 +90,13 @@ public class TimelineActivity extends AppCompatActivity {
 
     }
 
+    public static TimelineActivity getInstance() {
+        return instance;
+    }
+
     public void loadNextDataFromApi(int offset) {
         // Send an API request to retrieve appropriate paginated data
-        client.getNextPage(tweets.get(tweets.size()-1).getId(), new JsonHttpResponseHandler(){
+        client.getNextPage(tweets.get(tweets.size() - 1).getId(), new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
@@ -161,14 +170,28 @@ public class TimelineActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        System.out.println("here");
-        if(requestCode == REQUEST_CODE && resultCode == RESULT_OK){
+        System.out.println("here activity result " + requestCode);
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
             Tweet tweet = Parcels.unwrap(data.getParcelableExtra("tweet"));
-            tweets.add(0,tweet);
+            tweets.add(0, tweet);
             adapter.notifyItemInserted(0);
             rvTweets.smoothScrollToPosition(0); //will set your screen to the very top of the list
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void reload(@Nullable Intent data) {
+        Tweet tweet = Parcels.unwrap(data.getParcelableExtra("tweet"));
+        tweets.add(0, tweet);
+        adapter.notifyItemInserted(0);
+        rvTweets.smoothScrollToPosition(0); //will set your screen to the very top of the list
+    }
+
+    public void addToFront(@Nullable Intent data) {
+        Tweet tweet = Parcels.unwrap(data.getParcelableExtra("tweet"));
+        tweets.add(0, tweet);
+        adapter.notifyItemInserted(0);
+        //rvTweets.smoothScrollToPosition(0); //will set your screen to the very top of the list
     }
 
 }

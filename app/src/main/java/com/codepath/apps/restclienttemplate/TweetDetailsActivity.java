@@ -154,7 +154,7 @@ public class TweetDetailsActivity extends AppCompatActivity {
                     Toast.makeText(TweetDetailsActivity.this, "Undid retweet successfully!", Toast.LENGTH_LONG).show();
 
                     Glide.with(TweetDetailsActivity.this).load(R.drawable.ic_vector_retweet_stroke).into(ivRetweet);
-                    ivLike.setTag("unretweeted");
+                    ivRetweet.setTag("unretweeted");
                 }
 
                 @Override
@@ -169,10 +169,23 @@ public class TweetDetailsActivity extends AppCompatActivity {
             client.retweet(tweet.getId(), new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Headers headers, JSON json) {
+                    System.out.println("HERERERERERERER");
+                    System.out.println(json.jsonObject);
                     Toast.makeText(TweetDetailsActivity.this, "Retweeted successfully!", Toast.LENGTH_LONG).show();
 
                     Glide.with(TweetDetailsActivity.this).load(R.drawable.ic_vector_retweet).into(ivRetweet);
-                    ivLike.setTag("retweeted");
+                    ivRetweet.setTag("retweeted");
+
+                    //will not shown my own retweets on timeline
+
+//                    Intent intent = new Intent();
+//                    try {
+//                        intent.putExtra("tweet", Parcels.wrap(Tweet.fromJson(json.jsonObject)));
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+
+                    //TimelineActivity.getInstance().addToFront(intent);
                 }
 
                 @Override
@@ -188,14 +201,4 @@ public class TweetDetailsActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public void onBackPressed()
-    {
-       // Intent intent = new Intent(TweetDetailsActivity.this, TimelineActivity.class);
-       // startActivity(intent);
-        // Add your code here
-        System.out.println("here back pressed tweet details");
-        // Then call the parent constructor to have the default button functionality
-        super.onBackPressed();
-    }
 }

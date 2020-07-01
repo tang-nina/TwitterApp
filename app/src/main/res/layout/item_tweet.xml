@@ -30,13 +30,15 @@
 
     <TextView
         android:id="@+id/tvBody"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvName"
         android:layout_marginStart="5dp"
         android:layout_marginTop="2dp"
         android:layout_toEndOf="@+id/ivProfilePic"
         android:textColor="#000000"
+        android:autoLink="all"
+        android:linksClickable="true"
         tools:text="This is my tweet." />
 
     <TextView
@@ -68,4 +70,14 @@
         android:layout_marginTop="5dp"
         android:scaleType="fitCenter"
         tools:srcCompat="@tools:sample/avatars" />
+
+    <ImageView
+        android:id="@+id/ivReply"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_below="@id/ivMedia"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="false"
+        android:elevation="1dp"
+        app:srcCompat="@drawable/ic_vector_retweet_stroke" />
 </RelativeLayout>

@@ -70,6 +70,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         TextView tvHandle;
         TextView tvRelativeTime;
         ImageView ivMedia;
+        ImageView ivReply;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -80,8 +81,26 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvHandle = itemView.findViewById(R.id.tvHandle);
             tvRelativeTime = itemView.findViewById(R.id.tvRelativeTime);
             ivMedia = itemView.findViewById(R.id.ivMedia);
+            ivReply = itemView.findViewById(R.id.ivReply);
 
             itemView.setOnClickListener(this);
+
+            ivReply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        System.out.println("HERE");
+                        Intent intent = new Intent(context, ReplyActivity.class);
+                        Tweet curTweet = tweets.get(position);
+                        intent.putExtra(Tweet.class.getSimpleName(), Parcels.wrap(curTweet));
+                        //intent.putExtra("position", position);
+                        context.startActivity(intent);
+                    }
+
+                }
+            });
+
         }
 
         public void bind(Tweet tweet) {
