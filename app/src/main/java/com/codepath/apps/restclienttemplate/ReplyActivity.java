@@ -44,7 +44,7 @@ public class ReplyActivity extends AppCompatActivity {
                 client.reply(body, tweet.getId(), new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Headers headers, JSON json) {
-                        Toast.makeText(ReplyActivity.this, "Your reply tweet was successful! ", Toast.LENGTH_LONG).show();
+                        Toast.makeText(ReplyActivity.this, "Your reply tweet was successful! ", Toast.LENGTH_SHORT).show();
 
                         Tweet tweet = null;
                         try {
@@ -61,7 +61,7 @@ public class ReplyActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                        Toast.makeText(ReplyActivity.this, "Your reply tweet was not successful. ", Toast.LENGTH_LONG).show();
+                        Toast.makeText(ReplyActivity.this, "Your reply tweet was not successful. ", Toast.LENGTH_SHORT).show();
                         Log.e(TAG, "onFailure: reply", throwable);
                     }
                 });

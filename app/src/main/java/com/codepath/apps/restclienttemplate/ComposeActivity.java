@@ -34,7 +34,7 @@ public class ComposeActivity extends AppCompatActivity {
 
         client = TwitterApplication.getRestClient(this);
 
-        getSupportActionBar().setTitle("Compose a Tweet");
+        getSupportActionBar().setTitle("Compose Tweet");
 
         binding.btnTweet.setOnClickListener(new View.OnClickListener() {
 
@@ -44,10 +44,10 @@ public class ComposeActivity extends AppCompatActivity {
 
                 //checking if tweet is valid
                 if (text.isEmpty()) {
-                    Toast.makeText(ComposeActivity.this, "Your tweet cannot be empty. ", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ComposeActivity.this, "Your tweet cannot be empty. ", Toast.LENGTH_SHORT).show();
                     return;
                 } else if (text.length() > MAX_TWEET_LENGTH) {
-                    Toast.makeText(ComposeActivity.this, "Your tweet is too long. ", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ComposeActivity.this, "Your tweet is too long. ", Toast.LENGTH_SHORT).show();
                     return;
                 }
 

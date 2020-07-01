@@ -3,6 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/miCompose"
+        android:checkable="false"
+        android:enabled="false"
+        android:icon="@drawable/ic_vector_home"
+        android:title="Home"
+        app:showAsAction="always"></item>
+
+    <item
         android:id="@+id/compose"
         android:icon="@drawable/vector_compose_shortcut"
         android:title="compose"

@@ -100,7 +100,7 @@ public class TweetDetailsActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                    Toast.makeText(TweetDetailsActivity.this, "Something went wrong - couldn't unlike tweet.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(TweetDetailsActivity.this, "Something went wrong - couldn't unlike tweet.", Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "onFailure: unliking a tweet", throwable);
 
                 }
@@ -117,7 +117,7 @@ public class TweetDetailsActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                    Toast.makeText(TweetDetailsActivity.this, "Something went wrong - couldn't like tweet.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(TweetDetailsActivity.this, "Something went wrong - couldn't like tweet.", Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "onFailure: liking a tweet", throwable);
 
                 }
@@ -133,7 +133,7 @@ public class TweetDetailsActivity extends AppCompatActivity {
             client.unRetweet(tweet.getId(), new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Headers headers, JSON json) {
-                    Toast.makeText(TweetDetailsActivity.this, "Undid retweet successfully!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(TweetDetailsActivity.this, "Undid retweet successfully!", Toast.LENGTH_SHORT).show();
 
                     Glide.with(TweetDetailsActivity.this).load(R.drawable.ic_vector_retweet_stroke).into(binding.ivRetweet);
                     binding.ivRetweet.setTag("unretweeted");
@@ -141,7 +141,7 @@ public class TweetDetailsActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                    Toast.makeText(TweetDetailsActivity.this, "Something went wrong - couldn't undo retweet.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(TweetDetailsActivity.this, "Something went wrong - couldn't undo retweet.", Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "onFailure:  unretweet", throwable);
 
                 }
@@ -153,7 +153,7 @@ public class TweetDetailsActivity extends AppCompatActivity {
                 public void onSuccess(int statusCode, Headers headers, JSON json) {
                     System.out.println("HERERERERERERER");
                     System.out.println(json.jsonObject);
-                    Toast.makeText(TweetDetailsActivity.this, "Retweeted successfully!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(TweetDetailsActivity.this, "Retweeted successfully!", Toast.LENGTH_SHORT).show();
 
                     Glide.with(TweetDetailsActivity.this).load(R.drawable.ic_vector_retweet).into(binding.ivRetweet);
                     binding.ivRetweet.setTag("retweeted");
@@ -171,7 +171,7 @@ public class TweetDetailsActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                    Toast.makeText(TweetDetailsActivity.this, "Something went wrong - couldn't retweet.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(TweetDetailsActivity.this, "Something went wrong - couldn't retweet.", Toast.LENGTH_SHORT).show();
                     Log.e(TAG, "onFailure:  retweet", throwable);
 
                 }

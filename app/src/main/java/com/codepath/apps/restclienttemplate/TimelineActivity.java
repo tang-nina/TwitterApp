@@ -154,7 +154,6 @@ public class TimelineActivity extends AppCompatActivity {
             case R.id.compose: //compose button tapped
                 Intent intent = new Intent(this, ComposeActivity.class);
                 startActivityForResult(intent, REQUEST_CODE);
-                //composeMessage();  //bring up compose activity
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

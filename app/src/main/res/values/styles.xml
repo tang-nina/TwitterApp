@@ -1,16 +1,11 @@
 <resources>
 
-    <style name="AppBaseTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!--
-            Theme customizations available in newer API levels can go in
-            res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
-        -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
+        <!-- Customize your theme here. -->
+        <!-- This code is for changing the color of the bar. -->
+        <!-- Type your colour code which you want to set in colorPrimary item -->
+        <item name="colorPrimary">#FFFFFF</item>
+        <item name="colorPrimaryDark">@color/twitter_blue</item>
+        <item name="colorAccent">@color/twitter_blue_fill_pressed</item>
     </style>
-
-    <!-- Application theme. -->
-    <style name="AppTheme" parent="AppBaseTheme">
-        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
-    </style>
-
 </resources>
