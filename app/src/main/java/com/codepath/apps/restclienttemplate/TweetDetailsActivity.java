@@ -3,13 +3,12 @@ package com.codepath.apps.restclienttemplate;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.codepath.apps.restclienttemplate.databinding.ActivityTweetDetailsBinding;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
@@ -24,50 +23,33 @@ public class TweetDetailsActivity extends AppCompatActivity {
     private static final String TAG = "TweetDetailsActivity";
 
     Tweet tweet;
-    //int position;
-
-    ImageView ivProfilePic;
-    TextView tvBody;
-    TextView tvName;
-    TextView tvHandle;
-    TextView tvTimestamp;
-    ImageView ivMedia;
-    ImageView ivLike;
-    ImageView ivRetweet;
     TwitterClient client;
+    ActivityTweetDetailsBinding binding;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tweet_details);
+        binding = ActivityTweetDetailsBinding.inflate(getLayoutInflater());
+        // layout of activity is stored in a special property called root
+        View view = binding.getRoot();
+        setContentView(view);
 
         tweet = Parcels.unwrap(getIntent().getParcelableExtra(Tweet.class.getSimpleName()));
-        //position = getIntent().getIntExtra("position", -1);
-
-        ivProfilePic = findViewById(R.id.ivProfilePic);
-        tvBody = findViewById(R.id.tvBody);
-        tvName = findViewById(R.id.tvName);
-        tvHandle = findViewById(R.id.tvHandle);
-        tvTimestamp = findViewById(R.id.tvTimestamp);
-        ivMedia = findViewById(R.id.ivMedia);
-
-        ivLike = findViewById(R.id.ivLike);
-        ivRetweet = findViewById(R.id.ivRetweet);
-
         client = TwitterApplication.getRestClient(this);
 
-        tvBody.setText(tweet.getBody());
-        tvName.setText(tweet.getUser().getName());
-        tvHandle.setText(tweet.getUser().getTwitterId());
-        tvTimestamp.setText(tweet.getRelativeTime());
+        binding.tvBody.setText(tweet.getBody());
+        binding.tvName.setText(tweet.getUser().getName());
+        binding.tvHandle.setText(tweet.getUser().getTwitterId());
+        binding.tvTimestamp.setText(tweet.getRelativeTime());
 
-        Glide.with(this).load(tweet.getUser().getProfileImageUrl()).into(ivProfilePic);
+        Glide.with(this).load(tweet.getUser().getProfileImageUrl()).into(binding.ivProfilePic);
 
         if (tweet.getMediaUrl().equals("")) {
-            ivMedia.setVisibility(View.GONE);
+            binding.ivMedia.setVisibility(View.GONE);
         } else {
-            ivMedia.setVisibility(View.VISIBLE);
-            Glide.with(this).load(tweet.getMediaUrl()).fitCenter().transform(new RoundedCornersTransformation(20, 0)).into(ivMedia);
+            binding.ivMedia.setVisibility(View.VISIBLE);
+            Glide.with(this).load(tweet.getMediaUrl()).fitCenter().transform(new RoundedCornersTransformation(20, 0)).into(binding.ivMedia);
         }
 
         client.getTweet(tweet.getId(), new JsonHttpResponseHandler(){
@@ -85,14 +67,14 @@ public class TweetDetailsActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                if(liked){
-                    Glide.with(TweetDetailsActivity.this).load(R.drawable.ic_vector_heart).into(ivLike);
-                    ivLike.setTag("liked");
+                if(liked) {
+                    Glide.with(TweetDetailsActivity.this).load(R.drawable.ic_vector_heart).into(binding.ivLike);
+                    binding.ivLike.setTag("liked");
                 }
 
-                if(retweeted){
-                    Glide.with(TweetDetailsActivity.this).load(R.drawable.ic_vector_retweet).into(ivRetweet);
-                    ivRetweet.setTag("retweeted");
+                if(retweeted) {
+                    Glide.with(TweetDetailsActivity.this).load(R.drawable.ic_vector_retweet).into(binding.ivRetweet);
+                    binding.ivRetweet.setTag("retweeted");
                 }
             }
 
@@ -106,14 +88,14 @@ public class TweetDetailsActivity extends AppCompatActivity {
 
     public void clickHeart(android.view.View like){
 
-        if(ivLike.getTag().equals("liked")){
+        if (binding.ivLike.getTag().equals("liked")) {
             //twitter api to unlike
             client.unlikeTweet(tweet.getId(), new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Headers headers, JSON json) {
                     //nothing needs to be done
-                    Glide.with(TweetDetailsActivity.this).load(R.drawable.ic_vector_heart_stroke).into(ivLike);
-                    ivLike.setTag("unliked");
+                    Glide.with(TweetDetailsActivity.this).load(R.drawable.ic_vector_heart_stroke).into(binding.ivLike);
+                    binding.ivLike.setTag("unliked");
                 }
 
                 @Override
@@ -129,8 +111,8 @@ public class TweetDetailsActivity extends AppCompatActivity {
             client.likeTweet(tweet.getId(), new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Headers headers, JSON json) {
-                    Glide.with(TweetDetailsActivity.this).load(R.drawable.ic_vector_heart).into(ivLike);
-                    ivLike.setTag("liked");
+                    Glide.with(TweetDetailsActivity.this).load(R.drawable.ic_vector_heart).into(binding.ivLike);
+                    binding.ivLike.setTag("liked");
                 }
 
                 @Override
@@ -146,15 +128,15 @@ public class TweetDetailsActivity extends AppCompatActivity {
     public void clickRetweet(android.view.View retweet){
         //open up something to make a retweet, call twitter api
 
-        if(ivRetweet.getTag().equals("retweeted")) {
+        if (binding.ivRetweet.getTag().equals("retweeted")) {
 
             client.unRetweet(tweet.getId(), new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Headers headers, JSON json) {
                     Toast.makeText(TweetDetailsActivity.this, "Undid retweet successfully!", Toast.LENGTH_LONG).show();
 
-                    Glide.with(TweetDetailsActivity.this).load(R.drawable.ic_vector_retweet_stroke).into(ivRetweet);
-                    ivRetweet.setTag("unretweeted");
+                    Glide.with(TweetDetailsActivity.this).load(R.drawable.ic_vector_retweet_stroke).into(binding.ivRetweet);
+                    binding.ivRetweet.setTag("unretweeted");
                 }
 
                 @Override
@@ -173,8 +155,8 @@ public class TweetDetailsActivity extends AppCompatActivity {
                     System.out.println(json.jsonObject);
                     Toast.makeText(TweetDetailsActivity.this, "Retweeted successfully!", Toast.LENGTH_LONG).show();
 
-                    Glide.with(TweetDetailsActivity.this).load(R.drawable.ic_vector_retweet).into(ivRetweet);
-                    ivRetweet.setTag("retweeted");
+                    Glide.with(TweetDetailsActivity.this).load(R.drawable.ic_vector_retweet).into(binding.ivRetweet);
+                    binding.ivRetweet.setTag("retweeted");
 
                     //will not shown my own retweets on timeline
 
@@ -184,7 +166,6 @@ public class TweetDetailsActivity extends AppCompatActivity {
 //                    } catch (JSONException e) {
 //                        e.printStackTrace();
 //                    }
-
                     //TimelineActivity.getInstance().addToFront(intent);
                 }
 

@@ -22,6 +22,10 @@ android {
         buildConfigField("String", "CONSUMER_SECRET", apikeyProperties['CONSUMER_SECRET'])
     }
 
+    buildFeatures {
+        viewBinding true
+    }
+
     // Related to https://github.com/scribejava/scribejava/issues/480
     // Scribe expects Java 7 or this custom Apache library
     lintOptions {
@@ -57,4 +61,5 @@ dependencies {
     implementation 'jp.wasabeef:glide-transformations:4.1.0'
     // Glide v4 uses this new annotation processor -- see https://bumptech.github.io/glide/doc/generatedapi.html
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+
 }

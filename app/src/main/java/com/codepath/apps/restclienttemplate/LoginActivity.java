@@ -17,7 +17,10 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_login);
+		final com.codepath.apps.restclienttemplate.databinding.ActivityLoginBinding binding = com.codepath.apps.restclienttemplate.databinding.ActivityLoginBinding.inflate(getLayoutInflater());
+		// layout of activity is stored in a special property called root
+		View view = binding.getRoot();
+		setContentView(view);
 
 		final SampleModel sampleModel = new SampleModel();
 		sampleModel.setName("CodePath");
