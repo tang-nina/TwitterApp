@@ -87,5 +87,6 @@
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="0dp"
         android:onClick="clickRetweet"
+        android:tag = "unretweeted"
         app:srcCompat="@drawable/ic_vector_retweet_stroke" />
 </RelativeLayout>

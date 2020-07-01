@@ -108,6 +108,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                 Intent intent = new Intent(context, TweetDetailsActivity.class);
                 Tweet curTweet = tweets.get(position);
                 intent.putExtra(Tweet.class.getSimpleName(), Parcels.wrap(curTweet));
+                //intent.putExtra("position", position);
                 context.startActivity(intent);
             }
         }
