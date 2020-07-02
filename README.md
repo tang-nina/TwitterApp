@@ -53,6 +53,7 @@ Here's a walkthrough of implemented user stories:
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
+Code will not work after downloading because the API keys have not beeen uploaded. 
 
 ## Open-source libraries used
 
