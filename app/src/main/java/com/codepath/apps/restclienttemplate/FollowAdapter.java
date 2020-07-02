@@ -44,6 +44,11 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.ViewHolder
         notifyDataSetChanged();
     }
 
+    public void addAll(List<User> list) {
+        users.addAll(list);
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
         return users.size();

@@ -69,16 +69,24 @@
             android:textColor="@color/twitter_blue" />
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvAccounts"
-        android:layout_width="417dp"
-        android:layout_height="470dp"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_above="@+id/tvTwitterLink1"
-        android:layout_below="@+id/llFollowBar"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp" />
+        android:layout_below="@+id/llFollowBar">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvAccounts"
+            android:layout_width="417dp"
+            android:layout_height="470dp"
+            android:layout_above="@+id/tvTwitterLink1"
+            android:layout_below="@+id/llFollowBar"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <TextView
         android:id="@+id/tvTwitterLink1"
