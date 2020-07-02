@@ -26,6 +26,7 @@ public class Tweet {
 
     public Tweet(){}
 
+    //turns a Tweet in the form of a json into a Tweet object
     public static Tweet fromJson(JSONObject json) throws JSONException {
         Tweet tweet = new Tweet();
         tweet.body = json.getString("text");
@@ -37,20 +38,19 @@ public class Tweet {
         JSONObject entities = json.getJSONObject("entities");
         JSONArray media = null;
         try {
-           media = entities.getJSONArray("media");
-           JSONObject first_pic = media.getJSONObject(0);
-           tweet.mediaUrl = first_pic.getString("media_url_https");
+            media = entities.getJSONArray("media");
+            JSONObject first_pic = media.getJSONObject(0);
+            tweet.mediaUrl = first_pic.getString("media_url_https");
         }catch(JSONException e){
             System.out.println(tweet.body);
             System.out.println(entities);
             System.out.println();
             tweet.mediaUrl = "";
         }
-
-
         return tweet;
     }
 
+    //turns a list of Tweets in the form of a json array into a list of Tweet objects
     public static List<Tweet> fromJson(JSONArray jsonArray) throws JSONException {
         ArrayList<Tweet> tweets = new ArrayList<Tweet>(jsonArray.length());
 
@@ -59,10 +59,10 @@ public class Tweet {
             tweet = fromJson(jsonArray.getJSONObject(i));
             tweets.add(tweet);
         }
-
         return tweets;
     }
 
+    //turns a string in the Twitter date form into a string representing the relative time
     public static String getRelativeTimeAgo(String rawJsonDate) {
         String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
         SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);

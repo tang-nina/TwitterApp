@@ -15,6 +15,7 @@ import com.codepath.apps.restclienttemplate.models.User;
 
 import java.util.List;
 
+//adapter for the recycler view displaying followers/following
 public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.ViewHolder> {
 
     Context context;
@@ -36,14 +37,15 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.ViewHolder
     public void onBindViewHolder(@NonNull FollowAdapter.ViewHolder holder, int position) {
         User user = users.get(position);
         holder.bind(user);
-
     }
 
+    //clear all data the adapter is using
     public void clear() {
-        users.clear(); //modify the refernece, never assign an empty list!!
+        users.clear();
         notifyDataSetChanged();
     }
 
+    //add to the data the adapter is binding
     public void addAll(List<User> list) {
         users.addAll(list);
         notifyDataSetChanged();
@@ -54,12 +56,12 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.ViewHolder
         return users.size();
     }
 
+    //view holder for individual follower/following items in the recycler view
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView ivProfilePic;
         TextView tvName;
         TextView tvHandle;
-
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -73,7 +75,5 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.ViewHolder
             tvHandle.setText(user.getTwitterId());
             Glide.with(context).load(user.getProfileImageUrl()).circleCrop().into(ivProfilePic);
         }
-
     }
-
 }

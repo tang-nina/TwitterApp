@@ -42,16 +42,16 @@ public class TwitterClient extends OAuthBaseClient {
 						context.getString(R.string.intent_scheme), context.getPackageName(), FALLBACK_URL));
 	}
 
-
+	//api call to get timeline of tweets
 	public void getHomeTimeline(JsonHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("statuses/home_timeline.json");
-		// Can specify query string params directly or through RequestParams.
 		RequestParams params = new RequestParams();
 		params.put("count", 25);
 		params.put("since_id", 1);
 		client.get(apiUrl, params, handler);
 	}
 
+	//api call to get tweets older than a certain id (maxID)
 	public void getNextPage(long maxId, JsonHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("statuses/home_timeline.json");
 		// Can specify query string params directly or through RequestParams.
@@ -61,6 +61,8 @@ public class TwitterClient extends OAuthBaseClient {
 		client.get(apiUrl, params, handler);
 	}
 
+	//api call to publish a tweet
+	//body is the body of the tweet
 	public void postTweet(String body, JsonHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("statuses/update.json");
 		RequestParams params = new RequestParams();
@@ -68,6 +70,8 @@ public class TwitterClient extends OAuthBaseClient {
 		client.post(apiUrl, params, "", handler);
 	}
 
+	//api call to reply to a tweet (ie retweet with comment)
+	//body is the reply/added comment, id is the id of the tweet you are responding to
 	public void reply(String body, long id, JsonHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("statuses/update.json");
 		RequestParams params = new RequestParams();
@@ -77,6 +81,8 @@ public class TwitterClient extends OAuthBaseClient {
 		client.post(apiUrl, params, "", handler);
 	}
 
+	//api call to like a tweet
+	//id is the id of the tweet you are liking
 	public void likeTweet(long id, JsonHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("favorites/create.json");
 		RequestParams params = new RequestParams();
@@ -84,6 +90,8 @@ public class TwitterClient extends OAuthBaseClient {
 		client.post(apiUrl, params, "", handler);
 	}
 
+	//api call to unlike a tweet
+	//id is the id of the tweet you are unliking
 	public void unlikeTweet(long id, JsonHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("favorites/destroy.json");
 		RequestParams params = new RequestParams();
@@ -91,20 +99,25 @@ public class TwitterClient extends OAuthBaseClient {
 		client.post(apiUrl, params, "", handler);
 	}
 
+	//api call to retweet a tweet
+	//id is the id of the tweet you are retweeting
 	public void retweet(long id, JsonHttpResponseHandler handler) {
-		String apiUrl = getApiUrl("statuses/retweet/"+id+".json");
+		String apiUrl = getApiUrl("statuses/retweet/" + id + ".json");
 		RequestParams params = new RequestParams();
 		params.put("id", id);
 		client.post(apiUrl, params, "", handler);
 	}
 
+	//api call to un-retweet a tweet
+	//id is the id of the tweet that you had originally retweeted
 	public void unRetweet(long id, JsonHttpResponseHandler handler) {
-		String apiUrl = getApiUrl("statuses/unretweet/"+id+".json");
+		String apiUrl = getApiUrl("statuses/unretweet/" + id + ".json");
 		RequestParams params = new RequestParams();
 		params.put("id", id);
 		client.post(apiUrl, params, "", handler);
 	}
 
+	//api call to get basic info about a tweet with id id
 	public void getTweet(long id, JsonHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("statuses/show.json");
 		RequestParams params = new RequestParams();
@@ -112,7 +125,8 @@ public class TwitterClient extends OAuthBaseClient {
 		client.get(apiUrl, params, handler);
 	}
 
-	//won't get all the followers, only a portion of them
+	//api call to get followers of a user with id id
+	//cursor is the page of followers to return
 	public void getFollowers(long id, long cursor, JsonHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("followers/list.json");
 		RequestParams params = new RequestParams();
@@ -121,7 +135,8 @@ public class TwitterClient extends OAuthBaseClient {
 		client.get(apiUrl, params, handler);
 	}
 
-	//won't get all the following, only a portion of them
+	//api call to get following of a user with id id
+	//cursor is the page of following to return
 	public void getFollowing(long id, long cursor, JsonHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("friends/list.json");
 		RequestParams params = new RequestParams();

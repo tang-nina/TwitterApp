@@ -1,5 +1,4 @@
 package com.codepath.apps.restclienttemplate.models;
-// models/User.java
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,6 +19,7 @@ public class User {
     public User() {
     }
 
+    //turns a User in the form of a json into a User object
     public static User fromJson(JSONObject userJson) throws JSONException {
         User user = new User();
 
@@ -31,7 +31,7 @@ public class User {
         return user;
     }
 
-
+    //turns a list of Users in the form of a json array into a list of User objects
     public static List<User> fromJsonArray(JSONArray userJsons) throws JSONException {
         ArrayList<User> users = new ArrayList<User>(userJsons.length());
 
@@ -39,10 +39,8 @@ public class User {
             User user = fromJson(userJsons.getJSONObject(i));
             users.add(user);
         }
-
         return users;
     }
-
 
     public String getName() {
         return name;

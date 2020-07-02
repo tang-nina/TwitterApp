@@ -26,7 +26,6 @@ public class ReplyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final ActivityReplyBinding binding = ActivityReplyBinding.inflate(getLayoutInflater());
-        // layout of activity is stored in a special property called root
         View view = binding.getRoot();
         setContentView(view);
 
@@ -34,13 +33,15 @@ public class ReplyActivity extends AppCompatActivity {
 
         client = TwitterApplication.getRestClient(this);
         tweet = Parcels.unwrap(getIntent().getParcelableExtra(Tweet.class.getSimpleName()));
-        //android:hint="What's happening?"
 
         binding.tilCounter.setHint("Replying to " + tweet.getUser().getTwitterId());
+
+        //listener for reply button
         binding.btnReply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String body = binding.etCompose.getText().toString();
+                //api call to publish reply tweet
                 client.reply(body, tweet.getId(), new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Headers headers, JSON json) {
@@ -53,6 +54,7 @@ public class ReplyActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
 
+                        //send back to main screen and add it to the top of the feed
                         Intent intent = new Intent();
                         intent.putExtra("tweet", Parcels.wrap(tweet));
                         TimelineActivity.getInstance().reload(intent, true);
@@ -61,7 +63,7 @@ public class ReplyActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                        Toast.makeText(ReplyActivity.this, "Your reply tweet was not successful. ", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ReplyActivity.this, "Something went wrong. Please try again soon.", Toast.LENGTH_SHORT).show();
                         Log.e(TAG, "onFailure: reply", throwable);
                     }
                 });

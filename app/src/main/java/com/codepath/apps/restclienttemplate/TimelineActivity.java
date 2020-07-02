@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +27,7 @@ import java.util.List;
 
 import okhttp3.Headers;
 
+//activity for the main feed of tweets
 public class TimelineActivity extends AppCompatActivity {
     private static final String TAG = "TimelineActivity";
     private final int REQUEST_CODE = 20;
@@ -45,18 +47,19 @@ public class TimelineActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityTimelineBinding.inflate(getLayoutInflater());
-        // layout of activity is stored in a special property called root
         View view = binding.getRoot();
         setContentView(view);
 
         instance = this;
         client = TwitterApplication.getRestClient(this);
+        tweets = new ArrayList<Tweet>();
 
+        //allows refreshing the page by pulling down
         binding.swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                showProgressBar();
                 Log.i(TAG, "onRefresh: here");
+                showProgressBar();
                 adapter.clear();
                 populateHomeTimeline();
                 binding.swipeContainer.setRefreshing(false);
@@ -69,13 +72,13 @@ public class TimelineActivity extends AppCompatActivity {
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-        tweets = new ArrayList<Tweet>();
-
+        //configure adapter and recycler view
         adapter = new TweetsAdapter(this, tweets);
         binding.rvTweets.setAdapter(adapter);
         layoutManager = new LinearLayoutManager(this);
         binding.rvTweets.setLayoutManager(layoutManager);
 
+        // Adds the scroll listener to RecyclerView
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
@@ -84,33 +87,31 @@ public class TimelineActivity extends AppCompatActivity {
                 loadNextDataFromApi(page);
             }
         };
-        // Adds the scroll listener to RecyclerView
         binding.rvTweets.addOnScrollListener(scrollListener);
+
         populateHomeTimeline();
     }
 
+    //returns this activity
     public static TimelineActivity getInstance() {
         return instance;
     }
 
+    //fetches new data to add to the recycler view
     public void loadNextDataFromApi(int offset) {
-        // Send an API request to retrieve appropriate paginated data
         showProgressBar();
-        client.getNextPage(tweets.get(tweets.size() - 1).getId(), new JsonHttpResponseHandler() {
 
+        // Send an API request to retrieve appropriate paginated data
+        client.getNextPage(tweets.get(tweets.size() - 1).getId(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
-                //  --> Deserialize and construct new model objects from the API response
                 JSONArray array = json.jsonArray;
-
                 try {
-                    //  --> Append the new data objects to the existing set of items inside the array of items
-                    //  --> Notify the adapter of the new items made with `notifyItemRangeInserted()`
+                    //Append new data to adapter, notifies it.
                     adapter.addAll(Tweet.fromJson(array));
                     hideProgressBar();
-
                 }catch(JSONException e){
-                    Log.e(TAG, "json exception");
+                    Log.e(TAG, "Could not load new data");
                     hideProgressBar();
                 }
             }
@@ -118,11 +119,13 @@ public class TimelineActivity extends AppCompatActivity {
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
                 Log.e(TAG, "onFailure!", throwable);
+                Toast.makeText(TimelineActivity.this, "Could not load more tweets. ", Toast.LENGTH_SHORT).show();
                 hideProgressBar();
             }
         });
     }
 
+    //makes api call to get tweets for display
     private void populateHomeTimeline(){
         client.getHomeTimeline(new JsonHttpResponseHandler() {
             @Override
@@ -139,12 +142,13 @@ public class TimelineActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                Toast.makeText(TimelineActivity.this, "Could not load tweets. Please restart app.", Toast.LENGTH_SHORT).show();
+                hideProgressBar();
                 Log.e(TAG, "onFailure!", throwable);
             }
         });
     }
 
-    //for menus
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -160,31 +164,33 @@ public class TimelineActivity extends AppCompatActivity {
         return super.onPrepareOptionsMenu(menu); //finish
     }
 
+    // Show progress circle
     public void showProgressBar() {
-        // Show progress item
         miActionProgressItem.setVisible(true);
     }
 
+    // Hide progress circle
     public void hideProgressBar() {
-        // Hide progress item
         miActionProgressItem.setVisible(false);
     }
 
-    //passes the item on the actionbar that is clicked into this method, you can check it and carry
-    //out actions accordingly
+    //passes the item on the actionbar that is clicked into this method, you can check it
+    // and carry out actions accordingly
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
             case R.id.compose: //compose button tapped
                 Intent intent = new Intent(this, ComposeActivity.class);
-                startActivityForResult(intent, REQUEST_CODE);
+                startActivityForResult(intent, REQUEST_CODE); //go to compose activity
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+    //add a new tweet to the front of the feed.
+    //if flag is true then the recycler view will scroll to the newly inserted item
     public void reload(@Nullable Intent data, boolean flag) {
         Tweet tweet = Parcels.unwrap(data.getParcelableExtra("tweet"));
         tweets.add(0, tweet);
@@ -194,9 +200,10 @@ public class TimelineActivity extends AppCompatActivity {
         }
     }
 
+    //after compose activity finishes, will put new tweet at front of the feed using
+    //the reload method
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        //System.out.println("here activity result " + requestCode);
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
             reload(data, true);
         }

@@ -19,6 +19,7 @@ import org.parceler.Parcels;
 import okhttp3.Headers;
 
 public class ComposeActivity extends AppCompatActivity {
+
     private static final String TAG = "ComposeActivity";
     public static final int MAX_TWEET_LENGTH = 280;
 
@@ -26,9 +27,9 @@ public class ComposeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //create the view
         super.onCreate(savedInstanceState);
         final ActivityComposeBinding binding = ActivityComposeBinding.inflate(getLayoutInflater());
-        // layout of activity is stored in a special property called root
         View view = binding.getRoot();
         setContentView(view);
 
@@ -52,7 +53,6 @@ public class ComposeActivity extends AppCompatActivity {
                 }
 
                 //API call to publish tweet
-
                 client.postTweet(text, new JsonHttpResponseHandler(){
 
                     @Override
@@ -73,10 +73,9 @@ public class ComposeActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
                         Log.e(TAG, "onFailure publish tweet", throwable);
+                        Toast.makeText(ComposeActivity.this, "Could not tweet. Please try again soon. ", Toast.LENGTH_SHORT).show();
                     }
                 });
-
-
             }
         });
     }
