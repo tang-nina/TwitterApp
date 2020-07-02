@@ -39,7 +39,6 @@ public class TimelineActivity extends AppCompatActivity {
     ActivityTimelineBinding binding;
     MenuItem miActionProgressItem;
 
-
     private EndlessRecyclerViewScrollListener scrollListener;
 
     @Override
@@ -187,14 +186,12 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     public void reload(@Nullable Intent data, boolean flag) {
-        showProgressBar();
         Tweet tweet = Parcels.unwrap(data.getParcelableExtra("tweet"));
         tweets.add(0, tweet);
         adapter.notifyItemInserted(0);
         if (flag) {
             binding.rvTweets.smoothScrollToPosition(0); //will set your screen to the very top of the list
         }
-        hideProgressBar();
     }
 
     @Override

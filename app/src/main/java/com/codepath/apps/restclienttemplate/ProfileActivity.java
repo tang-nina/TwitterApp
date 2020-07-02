@@ -1,5 +1,7 @@
 package com.codepath.apps.restclienttemplate;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -24,6 +26,7 @@ import okhttp3.Headers;
 public class ProfileActivity extends AppCompatActivity {
     private static final String TAG = "ProfileActivity";
 
+    User user;
     List<User> users;
 
     List<User> following;
@@ -46,7 +49,7 @@ public class ProfileActivity extends AppCompatActivity {
         users = new ArrayList<>();
         getSupportActionBar().setTitle("Profile");
 
-        User user = Parcels.unwrap(getIntent().getParcelableExtra(User.class.getSimpleName()));
+        user = Parcels.unwrap(getIntent().getParcelableExtra(User.class.getSimpleName()));
 
         binding.tvName.setText(user.getName());
         binding.tvHandle.setText(user.getTwitterId());
@@ -56,6 +59,7 @@ public class ProfileActivity extends AppCompatActivity {
         llm = new LinearLayoutManager(this);
         binding.rvAccounts.setLayoutManager(llm);
         binding.rvAccounts.setAdapter(adapter);
+
 
         client.getFollowers(user.getId(), new JsonHttpResponseHandler() {
             @Override
@@ -112,5 +116,11 @@ public class ProfileActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
         binding.rvAccounts.smoothScrollToPosition(0);
 
+    }
+
+    public void openTwitterWeb(android.view.View view) {
+        String url = "https://twitter.com/" + user.getTwitterId() + "/followers";
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        startActivity(browserIntent);
     }
 }

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:onClick="openTwitterWeb"
     android:padding="8dp"
     tools:context=".ProfileActivity">
 
@@ -70,11 +71,32 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvAccounts"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="417dp"
+        android:layout_height="470dp"
+        android:layout_above="@+id/tvTwitterLink1"
         android:layout_below="@+id/llFollowBar"
         android:layout_alignParentStart="true"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="4dp" />
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp" />
+
+    <TextView
+        android:id="@+id/tvTwitterLink1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="0dp"
+        android:text="See the rest by logging into " />
+
+    <TextView
+        android:id="@+id/tvTwitterLink2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_toEndOf="@id/tvTwitterLink1"
+        android:text="@string/Twitter"
+        android:textColor="@color/twitter_blue_fill_pressed" />
 
 </RelativeLayout>
