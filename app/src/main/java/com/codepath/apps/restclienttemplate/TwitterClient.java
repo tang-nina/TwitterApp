@@ -109,8 +109,23 @@ public class TwitterClient extends OAuthBaseClient {
 		String apiUrl = getApiUrl("statuses/show.json");
 		RequestParams params = new RequestParams();
 		params.put("id", id);
-		client.get(apiUrl, params,handler);
+		client.get(apiUrl, params, handler);
 	}
 
+	//won't get all the followers, only a portion of them
+	public void getFollowers(long id, JsonHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("followers/list.json");
+		RequestParams params = new RequestParams();
+		params.put("user_id", id);
+		client.get(apiUrl, params, handler);
+	}
+
+	//won't get all the following, only a portion of them
+	public void getFollowing(long id, JsonHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("friends/list.json");
+		RequestParams params = new RequestParams();
+		params.put("user_id", id);
+		client.get(apiUrl, params, handler);
+	}
 
 }

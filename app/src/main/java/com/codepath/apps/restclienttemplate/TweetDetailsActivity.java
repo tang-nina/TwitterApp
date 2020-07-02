@@ -1,5 +1,7 @@
 package com.codepath.apps.restclienttemplate;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.codepath.apps.restclienttemplate.databinding.ActivityTweetDetailsBinding;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.apps.restclienttemplate.models.User;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
 import org.json.JSONException;
@@ -43,6 +46,17 @@ public class TweetDetailsActivity extends AppCompatActivity {
         binding.tvName.setText(tweet.getUser().getName());
         binding.tvHandle.setText(tweet.getUser().getTwitterId());
         binding.tvTimestamp.setText(tweet.getRelativeTime());
+
+        binding.ivProfilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Context context = TweetDetailsActivity.this;
+                Intent intent = new Intent(context, ProfileActivity.class);
+                intent.putExtra(User.class.getSimpleName(), Parcels.wrap(tweet.getUser()));
+                //intent.putExtra("position", position);
+                context.startActivity(intent);
+            }
+        });
 
         Glide.with(this).load(tweet.getUser().getProfileImageUrl()).circleCrop().into(binding.ivProfilePic);
 
